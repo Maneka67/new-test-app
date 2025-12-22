@@ -24,8 +24,8 @@ Thumbs.db
 *.log
 
 # Application
-./logs/
-*.json
+logs/
+
 H2.mv.db
 H2.trace.db
 
@@ -41,3 +41,4 @@ dist/
 thumbs.db
 .DS_Store
 
+maven_tool/

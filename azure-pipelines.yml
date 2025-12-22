@@ -1,0 +1,80 @@
+trigger:
+  - main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  javaVersion: '21'
+  mavenVersion: '3.9.6'
+  nodeVersion: '20.x'
+  backendArtifactName: 'innov8-backend'
+  frontendArtifactName: 'innov8-frontend'
+
+stages:
+  - stage: Build
+    displayName: 'Build Application'
+    jobs:
+      - job: BuildBackend
+        displayName: 'Build Spring Boot Backend'
+        steps:
+          - task: JavaToolInstaller@0
+            inputs:
+              versionSpec: '$(javaVersion)'
+              jdkArchitectureOption: 'x64'
+              jdkSourceOption: 'PreInstalled'
+          
+          - task: Maven@4
+            inputs:
+              mavenPomFile: 'pom.xml'
+              publishJUnitResults: true
+              testResultsFiles: '**/surefire-reports/TEST-*.xml'
+              javaHomeOption: 'JDKVersion'
+              jdkVersionOption: '1.21'
+              mavenVersionOption: 'Default'
+              mavenAuthenticateFeed: false
+              effectivePomSkip: false
+              sonarQubeRunAnalysis: false
+              goals: 'package'
+
+          - task: CopyFiles@2
+            displayName: 'Copy Backend Artifacts'
+            inputs:
+              SourceFolder: '$(System.DefaultWorkingDirectory)/target'
+              Contents: '**/*.jar'
+              TargetFolder: '$(Build.ArtifactStagingDirectory)/backend'
+
+          - task: PublishBuildArtifacts@1
+            displayName: 'Publish Backend Artifact'
+            inputs:
+              PathtoPublish: '$(Build.ArtifactStagingDirectory)/backend'
+              ArtifactName: '$(backendArtifactName)'
+              publishLocation: 'Container'
+
+      - job: BuildFrontend
+        displayName: 'Build React Frontend'
+        steps:
+          - task: NodeTool@0
+            inputs:
+              versionSpec: '$(nodeVersion)'
+            displayName: 'Install Node.js'
+
+          - script: |
+              npm install
+              npm run build
+            workingDirectory: 'frontend'
+            displayName: 'npm install and build'
+
+          - task: CopyFiles@2
+            displayName: 'Copy Frontend Artifacts'
+            inputs:
+              SourceFolder: 'frontend/dist'
+              Contents: '**'
+              TargetFolder: '$(Build.ArtifactStagingDirectory)/frontend'
+
+          - task: PublishBuildArtifacts@1
+            displayName: 'Publish Frontend Artifact'
+            inputs:
+              PathtoPublish: '$(Build.ArtifactStagingDirectory)/frontend'
+              ArtifactName: '$(frontendArtifactName)'
+              publishLocation: 'Container'
