@@ -38,4 +38,14 @@ jobs:
           name: veracode-artifact
           path: target/innov8-observability-lab-1.0.0.jar
 
+      - name: Run Veracode Scan
+        run: |
+         chmod +x veracode-cli/pipeline-scan.sh
+         ./veracode-cli/pipeline-scan.sh \
+           -vid ${{ secrets.VERACODE_API_ID }} \
+           -vkey ${{ secrets.VERACODE_API_KEY }} \
+           -action uploadandscan \
+           -appname "innov8-observability-lab" \
+           -createprofile true
+
  
