@@ -1,0 +1,3 @@
+veracode_static_scan:
+  use_custom_workflow: veracode-build
+  artifact_file: veracode-artifact/target/innov8-observability-lab-1.0.0.jar
