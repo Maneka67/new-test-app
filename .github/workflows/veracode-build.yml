@@ -1,5 +1,4 @@
 name: Veracode Build
- 
 on:
   repository_dispatch:
     types: [veracode-build]
