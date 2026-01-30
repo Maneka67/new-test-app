@@ -46,6 +46,7 @@ jobs:
       - name: Run a static scan
         run: |
           ./veracode static scan target/innov8-observability-lab-1.0.0.jar 
+          --app-id ${{ secrets.VERACODE_APP_ID }}
           
         env:
           VERACODE_API_KEY_ID: ${{ secrets.VERACODE_API_ID }}
