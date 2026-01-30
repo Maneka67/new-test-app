@@ -42,18 +42,14 @@ jobs:
         run: |
          curl -fsS https://tools.veracode.com/veracode-cli/install | sh
  
-      - name: Upload and Scan
+      - name: Run a static scan
         run: |
-         ./veracode uploadandscan \
-           --appname "innov8-observability-lab" \
-           --createprofile true \
-           --filepath target/innov8-observability-lab-1.0.0.jar \
-           --version "GitHub-${{ github.run_number }}"
-
+          ./veracode static scan target/innov8-observability-lab-1.0.0.jar \
+            --appname "${{ github.event.client_payload.user_config.profile_name }}" \
+            --version "GitHub-${{ github.run_number }}"
         env:
           VERACODE_API_KEY_ID: ${{ secrets.VERACODE_API_ID }}
           VERACODE_API_KEY_SECRET: ${{ secrets.VERACODE_API_KEY }}
-
  
 
  
