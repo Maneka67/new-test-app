@@ -44,15 +44,13 @@ jobs:
  
       - name: Upload and Scan
         run: |
-         ./veracode uploadandscan \
-           --appname "innov8-observability-lab" \
-           --createprofile true \
-           --filepath target/innov8-observability-lab-1.0.0.jar \
-           --version "GitHub-${{ github.run_number }}"
+         ./veracode static scan target/innov8-observability-lab-1.0.0.jar \
+            --app-name "innov8-observability-lab" \
+            --fail-on-policy
 
         env:
-          VERACODE_API_KEY_ID: ${{ secrets.VERACODE_API_ID }}
-          VERACODE_API_KEY_SECRET: ${{ secrets.VERACODE_API_KEY }}
+          VERACODE_API_KEY_ID: ${{ secrets.VERACODE_API_KEY_ID }}
+          VERACODE_API_KEY_SECRET: ${{ secrets.VERACODE_API_KEY_SECRET }}
 
  
 
