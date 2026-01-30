@@ -39,14 +39,14 @@ jobs:
           path: target/innov8-observability-lab-1.0.0.jar
 
       - name: Install Veracode CLI
-        run: |
-         curl -fsS https://tools.veracode.com/veracode-cli/install | sh
+        uses: wei/curl@master
+        with:
+          args: -fsS https://tools.veracode.com/veracode-cli/install | sh
  
       - name: Run a static scan
         run: |
-          ./veracode static scan target/innov8-observability-lab-1.0.0.jar \
-            --app-name "innov8-observability-lab" \
-            --fail-on-policy
+          ./veracode static scan target/innov8-observability-lab-1.0.0.jar 
+          
         env:
           VERACODE_API_KEY_ID: ${{ secrets.VERACODE_API_ID }}
           VERACODE_API_KEY_SECRET: ${{ secrets.VERACODE_API_KEY }}
