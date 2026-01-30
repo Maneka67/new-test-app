@@ -51,6 +51,13 @@ jobs:
         env:
           VERACODE_API_KEY_ID: ${{ secrets.VERACODE_API_ID }}
           VERACODE_API_KEY_SECRET: ${{ secrets.VERACODE_API_KEY }}
+
+      - name: Upload Veracode scan results
+        uses: actions/upload-artifact@v4
+        with:
+          name: veracode-results
+          path: results.json
+
  
 
  
